@@ -1,46 +1,45 @@
 #include<iostream>
 #include<vector>
-#include<unordered_set>
 #include<cmath>
 using namespace std;
-struct hash_pair {
-    size_t operator()(const pair<int, int>& p) const {
-        return hash<long long>()(((long long)p.first << 32) ^ p.second);
-    }
-};
+#include<map>
+
 int main(){
-    int n;
+    long long n;
     cin >> n;
-    for(int i = 0; i<n ;i ++){
-        int noOfCircles, radsum;
+    
+    for(long long j = 0; j <n; j++){
+        long long sum = 0;
+        map<long long, long long> pointsperX;
+        long long noOfCircles, radsum;
         cin >> noOfCircles >> radsum;
-        vector<int> centres;
-        for(int i = 0; i<noOfCircles; i++){
-            int k;
+        vector<long long> centres;
+        for(long long i = 0; i<noOfCircles; i++){
+            long long k;
             cin >> k;
             centres.push_back(k);
         }
-        vector<int> radii;
-        for(int i = 0; i<noOfCircles; i++){
-            int k;
+        vector<long long> radii;
+        for(long long i = 0; i<noOfCircles; i++){
+            long long k;
             cin >> k;
             radii.push_back(k);
         }
-        unordered_set<pair<int, int>, hash_pair> points;
-        for(int i = 0; i < noOfCircles; i++){
+        for(long long i = 0; i < noOfCircles; i++){
             
-            for(int x = centres[i]; x <= centres[i] + radii[i]; x++){
-                int maxy = sqrt(radii[i]*radii[i] - (x - centres[i])*(x - centres[i]));
-                for(int y = 0; y <= maxy; y++){
-                    points.insert(make_pair(x,y));
-                    points.insert(make_pair(x,-y));
-                    points.insert(make_pair(x - 2*(x - centres[i]),y));
-                    points.insert(make_pair(x - 2*(x - centres[i]),-y));
+            for(long long x = centres[i]; x <= centres[i] + radii[i]; x++){
+                long long noOfY = 2*(long long)(sqrt(radii[i]*radii[i] - (x-centres[i])*(x-centres[i]))) + 1;
+                if(pointsperX[x] < noOfY){
+                    sum += noOfY - pointsperX[x];
+                    pointsperX[x] = noOfY;
+                }
+                if(pointsperX[2*centres[i] - x] < noOfY){
+                    sum += noOfY - pointsperX[2*centres[i] - x];
+                    pointsperX[2*centres[i] - x] = noOfY;
                 }
             }
             
         }
-        cout << points.size()<<endl;
-        points.clear();
+        cout << sum<<endl;
     }
 }
