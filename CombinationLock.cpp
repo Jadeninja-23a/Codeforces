@@ -13,7 +13,7 @@ int main(){
                 yo = true;
                 break;
             }
-            combination[2*i%n] = i+1;
+            combination[2*i%n]
         }
         if(yo){
             cout << -1 << endl;
